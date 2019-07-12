@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
@@ -103,6 +103,37 @@
         }
 
     </script>
+ 
+        <script>
+            // 退出
+            $(function(){
+                // 获取字体图标的父级
+                $('.icon-tuichu').parent().on('click',function(e){
+                    // 阻止事件的默认行为
+                    e.preventDefault();
+                    $.post({
+                        url:"http://localhost:8000/admin/logout",
+                        success:function(backData){
+                           if (backData.code == 200 ) {
+                               location.href = './login.html';
+                           }
+                        }
+                    });
+                });
+            });
+            // 获取管理员登陆信息
+            $.get({
+                url:"http://localhost:8000/admin/getuser",
+                success:function(backData){
+                    console.log(backData);
+                    if(backData.code == 200 ){
+                        $('.user_info').children('span').html('欢迎&nbsp;&nbsp;'+ backData.data.nickname);
+                        $('.user_info').children('img').attr('src',backData.data.user_pic);
+                        $('.user_center_link').children('img').attr('src',backData.data.user_pic);
 
+                    }
+                }
+            })
+        </script>
 </body>
 </html>

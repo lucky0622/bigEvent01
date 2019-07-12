@@ -67,19 +67,39 @@
 
     <script>
         // 获取用户信息  渲染到页面上
-       $(function(){
-           var username = $('#inputEmail3').eq(0).val();
-           var nickname = $('#inputEmail3').val();
-           var email = $('#inputEmail3').eq(2).val();
-           var password = $('#inputEmail3').eq(3).val();
-         console.log(username);
-         console.log(nickname);
-         console.log(email);
-         console.log(password);
-         
-         
-         
-       })
+        $(function () {
+            var username = $('input').eq(0).val();
+            var nickname = $('input').eq(1).val();
+            var email = $('input').eq(2).val();
+            var user_pic = $('input').eq(3);
+            var password = $('input').eq(4).val();
+            // console.log(username);
+            // console.log(nickname);
+            // console.log(email);
+            // console.log(user_pic);
+            // console.log(password);
+            $('.btn-success').on('click', function (e) {
+                e.preventDefault();
+
+                $.get({
+                    url: "https://autumnfish.cn/big32/admin/userinfo_get",
+                    success: function (dackData) {
+                        console.log(dackData);
+                        if (dackData.code == 200) {
+                            username = dackData.data.username
+                            nickname = dackData.data.nickname
+                            email = dackData.data.email
+                            user_pic = dackData.data.user_pic
+                            password = dackData.data.password
+                            console.log(username,nickname,email,password);
+                            
+                        }
+                    }
+                });
+            });
+
+
+        });
     </script>
 
 </body>

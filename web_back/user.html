@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
-
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -24,19 +24,19 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="李思思">
+                        <input type="text" class="form-control username" value="李思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="思思">
+                        <input type="text" class="form-control nickname" value="思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="lisisi@126.com">
+                        <input type="text" class="form-control email" value="lisisi@126.com">
                     </div>
                 </div>
 
@@ -51,54 +51,92 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
                     <div class="col-sm-4">
-                        <input type="password" class="form-control" id="inputEmail3" value="12345678">
+                        <input type="password" class="form-control password" value="12345678">
                     </div>
                 </div>
 
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">修改</button>
+                        <button type="submit" class="btn btn-success btn-edit">修改</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    修改成功!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 获取用户信息  渲染到页面上
+        //    图片预览
+        // 给图片选择按钮加一个change事件  内容改变时触发
         $(function () {
-            var username = $('input').eq(0).val();
-            var nickname = $('input').eq(1).val();
-            var email = $('input').eq(2).val();
-            var user_pic = $('input').eq(3);
-            var password = $('input').eq(4).val();
-            // console.log(username);
-            // console.log(nickname);
-            // console.log(email);
-            // console.log(user_pic);
-            // console.log(password);
-            $('.btn-success').on('click', function (e) {
-                e.preventDefault();
-
-                $.get({
-                    url: "https://autumnfish.cn/big32/admin/userinfo_get",
-                    success: function (dackData) {
-                        console.log(dackData);
-                        if (dackData.code == 200) {
-                            username = dackData.data.username
-                            nickname = dackData.data.nickname
-                            email = dackData.data.email
-                            user_pic = dackData.data.user_pic
-                            password = dackData.data.password
-                            console.log(username,nickname,email,password);
-                            
-                        }
-                    }
-                });
+            $('#exampleInputFile').on('change', function () {
+                // 获取选中的图片  
+                var iconFile = this.files[0];
+                // 调用方法  获取url
+                var url = URL.createObjectURL(iconFile);
+                // 把url给img的src
+                $('.user_pic').attr('src', url);
             });
 
+            // 发送ajax请求  打开就把用户信息渲染到页面上
+            $.ajax({
+                url: "http://localhost:8000/admin/userinfo_get",
+                success: function (backData) {
+                    // console.log(backData);
+                    if (backData.code == 200) {
+                        // 获取到data  遍历backData
+                        for (var key in backData) {
+                            $('.' + key).val(backData.data[key]);
+                        }
+                        $('.user_pic').attr('src', backData.data[key]);
+                    }
+                }
+            });
 
+            // 需求  修改用户信息
+            // 给修改按钮添加点击事件
+            $('.btn-edit').on('click', function (e) {
+                e.preventDefault();
+                // 创建formData对象, 使用formData要保证form表单里面获取值得标签有name属性
+                var formdata = new FormData($('.article_form')[0]);
+                // 发送Ajax请求
+                $.post({
+                    url: "http://localhost:8000/admin/userinfo_edit",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (backData) {
+                        console.log(backData);
+                        if (backData.code == 200) {
+                            // 弹出修改成功
+                            $('#myModal').modal();
+
+                            // 给确认按钮设置一个点击事件
+                            $('.btn-primary').on('click',function(){
+                                
+                            })
+                        }
+                    }
+                })
+            })
         });
     </script>
 

@@ -34,7 +34,7 @@
                         </select>
                         <select id="selStatus" name="" class="form-control input-sm">
                             <option value="">所有状态</option>
-                            <option >草稿</option>
+                            <option>草稿</option>
                             <option>已发布</option>
                         </select>
                         <button id="btnSearch" class="btn btn-default btn-sm">筛选</button>
@@ -61,7 +61,7 @@
 
 
                     <tr>
-                        
+
                         <td>王积千造统最头</td>
                         <td>杰克</td>
                         <td>奇趣事</td>
@@ -80,7 +80,7 @@
 
 
                     <tr>
-                     
+
                         <td>级电使正回</td>
                         <td>肉丝</td>
                         <td>爱旅行</td>
@@ -99,7 +99,7 @@
 
 
                     <tr>
-                       
+
                         <td>近难领管年算</td>
                         <td>杰克</td>
                         <td>会生活</td>
@@ -118,7 +118,7 @@
 
 
                     <tr>
-                       
+
                         <td>龙大实究</td>
                         <td>杰克</td>
                         <td>未分类</td>
@@ -137,7 +137,7 @@
 
 
                     <tr>
-                      
+
                         <td>算性得走来拉</td>
                         <td>肉丝</td>
                         <td>奇趣事</td>
@@ -156,7 +156,7 @@
 
 
                     <tr>
-                      
+
                         <td>几平会出气</td>
                         <td>管理员</td>
                         <td>奇趣事</td>
@@ -175,7 +175,7 @@
 
 
                     <tr>
-                      
+
                         <td>世团先证型角</td>
                         <td>杰克</td>
                         <td>奇趣事</td>
@@ -194,7 +194,7 @@
 
 
                     <tr>
-                      
+
                         <td>构更反步五</td>
                         <td>肉丝</td>
                         <td>奇趣事</td>
@@ -213,7 +213,7 @@
 
 
                     <tr>
-                       
+
                         <td>组方些</td>
                         <td>肉丝</td>
                         <td>会生活</td>
@@ -232,7 +232,7 @@
 
 
                     <tr>
-                      
+
                         <td>日做发光成</td>
                         <td>管理员</td>
                         <td>爱旅行</td>
@@ -244,7 +244,7 @@
 
                         <td class="text-center">
                             <a href="post-edit.html?id=995" class="btn btn-default btn-xs">编辑</a>
-                            <a href="javascript:deleteTr( 995 );" class="btn btn-danger btn-xs">删除</a>
+                            <a href="javascript:deleteTr( 995 );" class="btn btn-danger btn-xs btn-delete">删除</a>
                         </td>
                     </tr>
 
@@ -271,10 +271,10 @@
         </div>
     </div>
 
-     <!-- 导入引擎模板 -->
-     <script src="./js/template-web.js"></script>
-     <!-- 写一个模板 文章类别 -->
-     <script id="art_cate" type="text/html">
+    <!-- 导入引擎模板 -->
+    <script src="./js/template-web.js"></script>
+    <!-- 写一个模板 文章类别 -->
+    <script id="art_cate" type="text/html">
         <option value="">所有分类</option>
         {{ each data }}
         <option value="{{ $value.id }}">{{ $value.name }}</option>
@@ -284,62 +284,62 @@
     <script id="art_list" type="text/html">
         {{ each data v }}
         <tr>
-                <td>{{v.title}}</td>
-                <td>{{v.author}}</td>
-                <td>{{v.type}}</td>
-                <td class="text-center">{{v.date}}</td>
-                <td class="text-center">{{v.state}}</td>
-                <td class="text-center">
-                    <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
-                    <a href="#" data-id="{{v.id}}" class="btn btn-danger btn-xs">删除</a>
-                </td>
-            </tr>
-    {{ /each }}
+            <td>{{v.title}}</td>
+            <td>{{v.author}}</td>
+            <td>{{v.type}}</td>
+            <td class="text-center">{{v.date}}</td>
+            <td class="text-center">{{v.state}}</td>
+            <td class="text-center">
+                <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                <a href="#" data-id="{{v.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
+            </td>
+        </tr>
+        {{ /each }}
     </script>
     <script>
         // 设置左侧菜单
-        $('#release_btn').click(function(){
-            window.parent.setMenu(1,1);
+        $('#release_btn').click(function () {
+            window.parent.setMenu(1, 1);
         })
 
-        $(function(){
+        $(function () {
             //需求:获取所有的文章类别,显示在下拉菜单中.
             $.ajax({
-                url:'http://localhost:8000/admin/category_search',
-                success: function(backData){
+                url: 'http://localhost:8000/admin/category_search',
+                success: function (backData) {
                     // console.log(backData);
 
-                    if(backData.code == 200 ){
-                         //使用模板引擎吧数据渲染到页面.
+                    if (backData.code == 200) {
+                        //使用模板引擎吧数据渲染到页面.
                         //调用模板引擎核心方法.
-                        var resHtml = template('art_cate',backData);
+                        var resHtml = template('art_cate', backData);
                         //把这个字符串交给文章类别的下拉菜单的html属性.
                         $('#selCategory').html(resHtml);
                     }
-                    
+
                 }
             });
 
-                // 声明一个变量,用来记录获取总的页码数
+            // 声明一个变量,用来记录获取总的页码数
 
-                var myTotalPage = 10;
+            var myTotalPage = 10;
 
-                // 需求  分页
-                var $pagination = $('.pagination');
-                
-                var defaultOpts = {
-                    totalPages: myTotalPage,  //最大的页签数
-                    visiblePages: 5,  //可见的页签数
-                    first:'首页',
-                    last:'尾页',
-                    prev:'上一页',
-                    next:'下一页',
-                    onPageClick:function(event,page){
-                        getData(page);
-                    }
-                };
+            // 需求  分页
+            var $pagination = $('.pagination');
 
-                $pagination.twbsPagination(defaultOpts);
+            var defaultOpts = {
+                totalPages: myTotalPage, //最大的页签数
+                visiblePages: 5, //可见的页签数
+                first: '首页',
+                last: '尾页',
+                prev: '上一页',
+                next: '下一页',
+                onPageClick: function (event, page) {
+                    getData(page);
+                }
+            };
+
+            $pagination.twbsPagination(defaultOpts);
 
             //发送ajax请求,查询对应页数的文章们.显示在页面上.
             function getData(myPage) {
@@ -355,29 +355,34 @@
                         page: myPage,
                         perpage: 5
                     },
-                    success: function(backData){
-                        console.log(backData);
-                        
-                        if(backData.code == 200 ){
+                    success: function (backData) {
+                        // console.log(backData);
+
+                        if (backData.code == 200) {
                             //调用模板引擎的核心方法.
-                            var resHtml = template('art_list',backData);
+                            var resHtml = template('art_list', backData);
                             $('tbody').html(resHtml);
 
-                             //因为总页数在发送ajax请求成功后返回的 数据中
+                            //因为总页数在发送ajax请求成功后返回的 数据中
                             //所以这个重绘页码条的代码写在这个成功的succes方法中
 
                             var totalPages = backData.totalPages; //获取新的总页数
                             // 判断
-                            if (myTotalPage != totalPages){
+
+                           
+
+                            window.currentPage = $pagination.twbsPagination(
+                            'getCurrentPage'); //获取当前页
+
+                            
+                            if (myTotalPage != totalPages) {
                                 //如果现在获取的新的页码数,不等于当前的总的页码数,那就要重绘.
+                                myTotalPage = totalPages;
+                            //把获取的新的总的页数,赋值给我们声明的变量(代表总页数)
 
-                                myTotalPage = totalPages; 
-                                //把获取的新的总的页数,赋值给我们声明的变量(代表总页数)
-
-                                var currentPage = $pagination.twbsPagination('getCurrentPage' ); //获取当前页
 
                                 $pagination.twbsPagination('destroy');
-                                $pagination.twbsPagination($.extend({},defaultOpts,{
+                                $pagination.twbsPagination($.extend({}, defaultOpts, {
                                     startPage: 1,
                                     totalPages: totalPages
                                 }));
@@ -388,12 +393,32 @@
             }
 
             //需求: 点击筛选按钮筛选出所有符合条件的文章.
-            $('#btnSearch').on('click',function(e){
+            $('#btnSearch').on('click', function (e) {
                 e.preventDefault();
                 getData(1);
             });
 
-            // $('#btnSearch').trigger('click');
+            // 需求  删除文章
+            // 给删除的按钮注册委托事件
+            $('tbody').on('click', '.btn-delete', function () {
+                var that = $(this); //保存当前点击这个删除按钮
+                if (confirm('你真的要删除吗?')) {
+                    // 获取删除文章的id
+                    var id = $(this).attr('data-id');
+                    $.ajax({
+                        url: 'http://localhost:8000/admin/article_delete',
+                        data: {
+                            id: id
+                        },
+                        success: function (backData) {
+                            // console.log(backData);
+                            if (backData.code == 200) {
+                                getData(currentPage);
+                            }
+                        }
+                    })
+                }
+            })
 
         });
     </script>
